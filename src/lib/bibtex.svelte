@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Paper, Venue } from './app-types';
-	import { hostname } from './hostname';
 	export let paper: Paper;
 	export let venue: Venue;
 
@@ -28,7 +27,8 @@
 			// attr('pages', pages),
 			// attr('publisher', p.publisher),
 			// attr('location', p.location),
-			attr('url', `${hostname}/papers/${p.webName}`),
+			// attr('url', `${hostname}/papers/${p.webName}`),
+			// attr('url')
 			attr('doi', p.doi)
 		];
 

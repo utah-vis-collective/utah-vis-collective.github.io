@@ -12,8 +12,12 @@
 		<a href={`${base}/papers/${paper.webName}`}>
 			<img
 				class="halo rounded-lg w-[120px]"
-				src={paper.thumbnail}
+				src={paper.thumbnail || '/images/people/placeholder.png'}
 				alt={`thumbnail image for ${paper.title}`}
+				on:error={(e) => {
+					// @ts-ignore
+					e.target.src = '/images/people/placeholder.png';
+				}}
 			/>
 		</a>
 	</div>

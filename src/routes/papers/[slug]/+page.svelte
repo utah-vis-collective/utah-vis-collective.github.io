@@ -6,10 +6,10 @@
 	import Bibtex from '$lib/bibtex.svelte';
 	import Materials from '$lib/materials.svelte';
 	import { displayName } from '$lib/display-name';
-	import { hostname } from '$lib/hostname';
 	export let data: { paper: Paper; venue: Venue };
 	$: paper = data.paper;
 	$: venue = data.venue;
+	let imageError = false;
 </script>
 
 <svelte:head>
@@ -17,11 +17,11 @@
 	<!-- add citation metadata -->
 	<meta property="og:title" content={paper.title} />
 	<meta property="og:type" content="article" />
-	<meta property="og:image" content={`${hostname}/${paper.figure}`} />
-	<meta property="og:url" content={`${hostname}/papers/${paper.webName}`} />
+	<meta property="og:image" content={`${base}/${paper.figure}`} />
+	<meta property="og:url" content={`${base}/papers/${paper.webName}`} />
 	<meta name="twitter:card" content="summary" />
 	<meta property="twitter:title" content={paper.title} />
-	<meta property="twitter:image" content={`${hostname}/thumbs/${paper.webName}.png`} />
+	<meta property="twitter:image" content={`${base}/thumbs/${paper.thumbnail}`} />
 	<meta property="twitter:image:alt" content="Project thumbnail image." />
 	{#if paper.doi}<meta name="citation_doi" content={paper.doi} />{/if}
 	<meta name="citation_title" content={paper.title} />
@@ -48,12 +48,20 @@
 		<div class="italic">{venue.fullName}, {paper.year}</div>
 	</div>
 
-	<figure class="mt-6">
-		<img src={`${base}/images/figures/${paper.webName}.png`} alt={`Figure for ${paper.title}`} />
-		<figcaption class="mt-2 text-xs leading-4">
-			{paper.caption}
-		</figcaption>
-	</figure>
+	{#if !imageError}
+		<figure class="mt-6">
+			<img
+				src={paper.figure.startsWith('http') ? paper.figure : `${base}/${paper.figure}`}
+				alt={`Figure for ${paper.title}`}
+				on:error={() => {
+					imageError = true;
+				}}
+			/>
+			<figcaption class="mt-2 text-xs leading-4">
+				{paper.caption}
+			</figcaption>
+		</figure>
+	{/if}
 
 	<div>
 		<div class="heading mt-6 mb-2 text-xs">Materials</div>

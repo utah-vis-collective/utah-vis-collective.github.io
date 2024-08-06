@@ -28,9 +28,11 @@
 		);
 
 	$: members = [...(groupsByPosition['Faculty'] || []), ...(groupsByPosition['Member'] || [])];
-	function lookupNameToUrl(lookupName: string) {
-		const url = lookupName.replace(/ /g, '-').toLowerCase();
-		return `${base}/images/people/${url}.jpg`;
+	function getUrl(url: string) {
+		if (url.startsWith('http')) {
+			return url;
+		}
+		return `${base}/${url}`;
 	}
 </script>
 
@@ -38,7 +40,7 @@
 	<title>UVC | People</title>
 	<!-- preload people images -->
 	{#each members as person}
-		<link rel="preload" as="image" href={lookupNameToUrl(person.lookupName)} />
+		<link rel="preload" as="image" href={getUrl(person.image)} />
 	{/each}
 </svelte:head>
 
@@ -50,11 +52,15 @@
 <div class="lead">members</div>
 <div class="flex-wrap flex w-full">
 	{#each members as person}
-		<div class="mt-2 flex flex-col w-[220px] items-center">
+		<div class="mt-2 flex flex-col w-[220px] min-h-[220px] items-center">
 			<a class="block grow-0 shrink-0" href={person.url}>
 				<img
-					src={lookupNameToUrl(person.lookupName)}
-					class="h-[220px]"
+					src={getUrl(person.image)}
+					class="h-[220px] rounded-full"
+					on:error={(e) => {
+						// @ts-ignore
+						e.target.src = '/images/people/placeholder.png';
+					}}
 					alt={`head shot of ${displayName(person)}`}
 				/>
 			</a>
@@ -74,4 +80,8 @@
 <PeopleList people={groupsByPosition['Alumni'] || []} />
 
 <div class="lead mt-6">collaborators</div>
-<PeopleList people={groupsByPosition['Collaborator']} />
+<PeopleList
+	people={groupsByPosition['Collaborator'].sort((a, b) =>
+		(a.lookupName.split(' ').at(-1) || '').localeCompare(b.lookupName.split(' ').at(-1) || '')
+	)}
+/>

@@ -16,7 +16,7 @@
 	});
 </script>
 
-<div class="relative w-full h-48 mb-8">
+<div class="relative w-full h-48 mb-8 overflow-hidden">
 	{#each projects as project, index (project)}
 		{#if index === currentIndex}
 			<a
