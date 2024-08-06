@@ -33,7 +33,7 @@ export interface Person {
 	lookupName: string;
 	displayName: string;
 	url: string;
-	position: 'Faculty' | 'Alumni' | 'Collaborator' | 'Other' | 'Member';
+	position: 'Faculty' | 'Alumni' | 'Collaborator' | 'Other' | 'PhD Student';
 	visible: boolean;
 	image: string;
 }

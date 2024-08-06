@@ -34,8 +34,12 @@
 </div>
 
 <div class="mission md:text-xl md:-mt-1 mb-4">
-	ABOUT TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
-	TODO TODO TODO TODO TODO TODO
+	We are a group of researchers and students at the University of Utah who are interested in the
+	visual representation of data, interfaces with data, human-factors, as well as related topics and
+	domain. Our research spans a wide range of areas, including human-computer interaction,
+	information visualization, topology, super computing, and programming interfaces. We are part of
+	the <a href="https://www.cs.utah.edu/">School of Computing</a> and are affiliated with the
+	<a href="https://www.sci.utah.edu/">Scientific Computing and Imaging Institute</a>.
 </div>
 
 <div class="mt-6 md:flex">

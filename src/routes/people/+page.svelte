@@ -2,7 +2,6 @@
 	import type { Person } from '$lib/app-types';
 	import { displayName } from '$lib/display-name';
 	import { base } from '$app/paths';
-	// import PeopleGrid from './people-grid.svelte';
 	import PeopleList from './people-list.svelte';
 
 	export let data: { people: Person[] };
@@ -27,7 +26,7 @@
 			{} as Record<Person['position'], Person[]>
 		);
 
-	$: members = [...(groupsByPosition['Faculty'] || []), ...(groupsByPosition['Member'] || [])];
+	$: members = [...(groupsByPosition['Faculty'] || []), ...(groupsByPosition['PhD Student'] || [])];
 	function getUrl(url: string) {
 		if (url.startsWith('http')) {
 			return url;
@@ -44,15 +43,10 @@
 	{/each}
 </svelte:head>
 
-<!-- <div class="hidden md:block">
-	<PeopleGrid people={members} />
-</div> -->
-
-<!-- <div class="md:hidden"> -->
 <div class="lead">members</div>
-<div class="flex-wrap flex w-full">
+<div class="flex-wrap flex w-full justify-center">
 	{#each members as person}
-		<div class="mt-2 flex flex-col w-[220px] min-h-[220px] items-center">
+		<div class="mt-2 flex flex-col w-[220px] min-h-[220px] items-center mx-4">
 			<a class="block grow-0 shrink-0" href={person.url}>
 				<img
 					src={getUrl(person.image)}
@@ -74,10 +68,9 @@
 		</div>
 	{/each}
 </div>
-<!-- </div> -->
 
-<div class="lead mt-6">alumni</div>
-<PeopleList people={groupsByPosition['Alumni'] || []} />
+<!-- <div class="lead mt-6">alumni</div>
+<PeopleList people={groupsByPosition['Alumni'] || []} /> -->
 
 <div class="lead mt-6">collaborators</div>
 <PeopleList
