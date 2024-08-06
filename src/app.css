@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a:hover {
+	color: #be0000;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	/* use montserrat */
+	font-family: 'Montserrat', sans-serif;
+}
+
+.social:hover path {
+	fill: #be0000;
+}
+
+.halo:hover {
+	box-shadow: 2px 2px 18px #be0000;
+}
+
+strong,
+b {
+	font-weight: 600;
+}
+
+.text-2xs {
+	font-size: 0.65rem;
+}
+
+.tracking-extra {
+	letter-spacing: 0.15em;
+}
+
+.text-utah {
+	color: #be0000;
+}
+
+p {
+	margin-bottom: 0.5em;
+}
+
+.quote {
+	padding-right: 5px;
+	margin-bottom: 1em;
+	font-style: italic;
+}
+
+.heading {
+	margin-bottom: 5px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.lead {
+	font-size: 15px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+div.lead {
+	margin-bottom: 0.5em;
+}
+
+.update a {
+	font-weight: 500;
+}
+
+.markdown h2 {
+	font-size: 15px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	margin-bottom: 0.5em;
+	margin-top: 1em;
+}
