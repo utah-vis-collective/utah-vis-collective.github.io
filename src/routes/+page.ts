@@ -26,7 +26,7 @@ export const load: PageLoad = async ({ fetch }) => {
 		return { venue, paper };
 	});
 
-	const groupedPapers = featuredVenues
+	const groupedPapersPre = featuredVenues
 		.filter(({ visible }) => visible)
 		.reverse()
 		.map((x) => {
@@ -43,6 +43,17 @@ export const load: PageLoad = async ({ fetch }) => {
 				event: x.desc
 			};
 		});
+
+	// merge papers with the same venue and year
+	const groupedPapers = [] as typeof groupedPapersPre;
+	for (const { papers, event } of groupedPapersPre) {
+		const existing = groupedPapers.find((x) => x.event === event);
+		if (existing) {
+			existing.papers.push(...papers);
+		} else {
+			groupedPapers.push({ papers, event });
+		}
+	}
 
 	const spotlight = groupedPapers.flatMap(({ papers }) => {
 		return papers.map(({ paper }) => {
