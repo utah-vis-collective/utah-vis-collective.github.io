@@ -64,6 +64,15 @@ export const load: PageLoad = async ({ fetch }) => {
 			groupedPapers.push({ papers, event });
 		}
 	}
+	// within each group, sort papers by title
+	groupedPapers.forEach(({ papers }) => {
+		papers.sort((a, b) => {
+			// trim the a's and the's from the beginning of the title
+			const titleA = a.paper.title.toLowerCase().replace(/^(a|the|an) /i, '');
+			const titleB = b.paper.title.toLowerCase().replace(/^(a|the|an) /i, '');
+			return titleA.localeCompare(titleB);
+		});
+	});
 
 	const spotlight = groupedPapers.flatMap(({ papers }) => {
 		return papers

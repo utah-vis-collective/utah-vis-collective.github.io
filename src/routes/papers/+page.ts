@@ -18,15 +18,21 @@ export const load: PageLoad = async ({ fetch }) => {
 		get(PEOPLE_TSV).then((x) => sheetToJson(x, PeoplePrep))
 	]);
 
-	const pairs = papers.map((paper) => {
-		const venue = venues.find((x) => x.nickname === paper.venue)!;
-		const authors = paper.authors.map((author) => {
-			const person = people.find((x) => x.lookupName === author);
-			return person || author;
+	const pairs = papers
+		.sort((a, b) => {
+			const aDate = new Date(a.pubDate);
+			const bDate = new Date(b.pubDate);
+			return aDate > bDate ? -1 : aDate < bDate ? 1 : 0;
+		})
+		.map((paper) => {
+			const venue = venues.find((x) => x.nickname === paper.venue)!;
+			const authors = paper.authors.map((author) => {
+				const person = people.find((x) => x.lookupName === author);
+				return person || author;
+			});
+			paper.authors = authors;
+			return { venue, paper };
 		});
-		paper.authors = authors;
-		return { venue, paper };
-	});
 
 	return { pairs };
 };

@@ -46,7 +46,7 @@
 <div class="lead">members</div>
 <div class="flex-wrap flex w-full justify-center">
 	{#each members as person}
-		<div class="mt-2 flex flex-col w-[220px] min-h-[220px] items-center mx-4">
+		<div class="mt-2 flex flex-col w-[220px] min-h-[220px] items-center mx-4 mb-8">
 			<a class="block grow-0 shrink-0" href={person.url}>
 				<img
 					src={getUrl(person.image)}

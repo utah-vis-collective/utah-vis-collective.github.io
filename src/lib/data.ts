@@ -20,12 +20,12 @@ export function sheetToJson<A>(x: string, mapper: (x: DSVRowString<string>) => A
 }
 export const PeoplePrep = (x: DSVRowString<string>): Person => {
 	return {
-		lookupName: x['LookupName'],
 		displayName: x['DisplayName'],
-		url: x['url'],
+		image: x['image'],
+		lookupName: x['LookupName'],
 		position: x['position'] as Person['position'],
-		visible: x['Visible'].toUpperCase() === 'TRUE',
-		image: x['image']
+		url: x['url'],
+		visible: x['Visible'].toUpperCase() === 'TRUE'
 	};
 };
 export const parseMarkdownLinks = (x: string) => {
@@ -43,15 +43,16 @@ export const PapersPrep = (x: DSVRowString<string>): Paper => {
 		authors: x['authors'].split(',').map((x) => x.trim()),
 		caption: x['caption'],
 		doi: x['doi'],
+		figure: x['figure'],
 		links: parseMarkdownLinks(x['materials']),
 		pubDate: x['pubDate'],
+		tags: x['tags'].split(',').map((x) => x.trim()),
+		thumbnail: x['thumbnail'],
 		title: x['title'],
 		type: x['type'] as Paper['type'],
 		venue: x['venue'],
 		webName: x['webName'],
-		year: +x['year'],
-		thumbnail: x['thumbnail'],
-		figure: x['figure']
+		year: +x['year']
 	};
 };
 export const VenuesPrep = (x: DSVRowString<string>): Venue => {

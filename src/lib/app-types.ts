@@ -16,12 +16,8 @@ export interface Paper {
 	note?: string;
 	thumbnail: string;
 	figure: string;
+	tags: string[];
 }
-
-// export interface SmallPerson {
-// 	firstName: string;
-// 	lastName: string;
-// }
 
 export interface Course {
 	name: string;

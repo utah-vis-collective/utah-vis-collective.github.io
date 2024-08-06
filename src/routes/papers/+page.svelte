@@ -3,7 +3,9 @@
 	import SmallPaper from '../../lib/small-paper.svelte';
 
 	type Pair = { paper: Paper; venue: Venue };
+
 	export let data: { pairs: Pair[] };
+
 	$: sectionedPapers = data.pairs.reduce(
 		(acc, x) => {
 			if (!acc[x.paper.year]) {
@@ -14,6 +16,8 @@
 		},
 		{} as Record<string, Pair[]>
 	);
+
+	// const utahColors = ['#708E99', '#FFB81D', '#890000', '#6CC24A', '#3ABFC0', '#E2E6E6'];
 </script>
 
 <svelte:head>
