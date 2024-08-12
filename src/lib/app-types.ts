@@ -32,6 +32,7 @@ export interface Person {
 	position: 'Faculty' | 'Alumni' | 'Collaborator' | 'Other' | 'PhD Student';
 	visible: boolean;
 	image: string;
+	worksWith: string | null;
 }
 
 export interface News {

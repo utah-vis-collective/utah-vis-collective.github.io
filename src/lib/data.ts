@@ -25,7 +25,8 @@ export const PeoplePrep = (x: DSVRowString<string>): Person => {
 		lookupName: x['LookupName'],
 		position: x['position'] as Person['position'],
 		url: x['url'],
-		visible: x['Visible'].toUpperCase() === 'TRUE'
+		visible: x['Visible'].toUpperCase() === 'TRUE',
+		worksWith: x['worksWith']
 	};
 };
 export const parseMarkdownLinks = (x: string) => {

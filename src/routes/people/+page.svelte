@@ -26,8 +26,15 @@
 			{} as Record<Person['position'], Person[]>
 		);
 
-	$: members = [...(groupsByPosition['Faculty'] || []), ...(groupsByPosition['PhD Student'] || [])];
-	function getUrl(url: string) {
+	$: students = [...(groupsByPosition['PhD Student'] || [])].sort((a, b) =>
+		(a.lookupName.split(' ').at(-1) || '').localeCompare(b.lookupName.split(' ').at(-1) || '')
+	);
+	$: members = [...(groupsByPosition['Faculty'] || []), ...students];
+	function getUrl(person: Person) {
+		const url = person.image;
+		if (!url) {
+			return '/images/people/missing-person.png';
+		}
 		if (url.startsWith('http')) {
 			return url;
 		}
@@ -39,7 +46,7 @@
 	<title>UVC | People</title>
 	<!-- preload people images -->
 	{#each members as person}
-		<link rel="preload" as="image" href={getUrl(person.image)} />
+		<link rel="preload" as="image" href={getUrl(person)} />
 	{/each}
 </svelte:head>
 
@@ -47,22 +54,40 @@
 <div class="flex-wrap flex w-full justify-center">
 	{#each members as person}
 		<div class="mt-2 flex flex-col w-[220px] min-h-[220px] items-center mx-4 mb-8">
-			<a class="block grow-0 shrink-0" href={person.url}>
+			{#if person.url}
+				<a class="block grow-0 shrink-0" href={person.url}>
+					<img
+						src={getUrl(person)}
+						class="h-[220px] rounded-full"
+						on:error={(e) => {
+							// @ts-ignore
+							e.target.src = '/images/people/missing-person.png';
+						}}
+						alt={`head shot of ${displayName(person)}`}
+					/>
+				</a>
+			{:else}
 				<img
-					src={getUrl(person.image)}
+					src={getUrl(person)}
 					class="h-[220px] rounded-full"
 					on:error={(e) => {
 						// @ts-ignore
-						e.target.src = '/images/people/placeholder.png';
+						e.target.src = '/images/people/missing-person.png';
 					}}
 					alt={`head shot of ${displayName(person)}`}
 				/>
-			</a>
-			<div class="ml-2">
+			{/if}
+			<div class="ml-2 text-center">
 				<div class="font-semibold">
 					<a class="at" href={person.url}>{displayName(person)}</a>
 				</div>
 				<div class="italic">{person.position}</div>
+				{#if person.url}
+					<a href={person.url} class="text-sm underline"> homepage </a>
+				{/if}
+				{#if person.worksWith}
+					<div class="text-sm">works with {person.worksWith}</div>
+				{/if}
 				<!-- <div class="text-sm">{person.interests}</div> -->
 			</div>
 		</div>

@@ -14,6 +14,8 @@
 	export let paper: Paper;
 	export let venue: Venue;
 	let abstractOpen = false;
+	let altText = 'thumbnail image for ' + paper.title;
+	let image = paper.thumbnail || '/images/thumbs/missing-paper.png';
 </script>
 
 <div class="md:flex paper text-[15px]" class:mb-6={!abstractOpen} class:mb-2={abstractOpen}>
@@ -21,11 +23,12 @@
 		<a href={`${base}/papers/${paper.webName}`}>
 			<img
 				class="halo rounded-lg w-[120px]"
-				src={paper.thumbnail || '/images/people/placeholder.png'}
-				alt={`thumbnail image for ${paper.title}`}
-				on:error={(e) => {
+				src={image}
+				alt={altText}
+				on:error={() => {
 					// @ts-ignore
-					e.target.src = '/images/people/placeholder.png';
+					image = '/images/thumbs/missing-paper.png';
+					altText = 'missing thumbnail image';
 				}}
 			/>
 		</a>
