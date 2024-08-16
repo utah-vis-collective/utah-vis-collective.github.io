@@ -6,16 +6,15 @@ import {
 	PEOPLE_TSV,
 	PapersPrep,
 	VenuesPrep,
-	PeoplePrep
+	PeoplePrep,
+	sheetGet
 } from '../../lib/data';
 
 export const load: PageLoad = async ({ fetch }) => {
-	const get = async (url: string) =>
-		fetch(url, { headers: { 'cache-control': 'public, max-age=3600' } }).then((res) => res.text());
 	const [papers, venues, people] = await Promise.all([
-		get(PAPERS_TSV).then((x) => sheetToJson(x, PapersPrep)),
-		get(VENUES_TSV).then((x) => sheetToJson(x, VenuesPrep)),
-		get(PEOPLE_TSV).then((x) => sheetToJson(x, PeoplePrep))
+		sheetGet(PAPERS_TSV, fetch).then((x) => sheetToJson(x, PapersPrep)),
+		sheetGet(VENUES_TSV, fetch).then((x) => sheetToJson(x, VenuesPrep)),
+		sheetGet(PEOPLE_TSV, fetch).then((x) => sheetToJson(x, PeoplePrep))
 	]);
 
 	const pairs = papers

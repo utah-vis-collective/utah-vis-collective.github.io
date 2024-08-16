@@ -13,6 +13,20 @@ export const NEWS_TSV =
 
 export const FEATURE_VENUES_TSV =
 	'https://docs.google.com/spreadsheets/d/e/2PACX-1vR8MS9MQ2pMoafkoJbTRoB-6Pdqd5Rf9yPMiW39DENWNRyOukJMmvKNhMvzNrmt2k0I194STGL_S18r/pub?gid=1523530879&single=true&output=tsv';
+
+const cache = new Map<string, any>();
+export const sheetGet = async (url: string, fetch: any) => {
+	if (cache.has(url)) {
+		return cache.get(url);
+	}
+	return fetch(url, { headers: { 'cache-control': 'public, max-age=3600' } })
+		.then((res: any) => res.text())
+		.then((x: any) => {
+			cache.set(url, x);
+			return x;
+		});
+};
+
 export function sheetToJson<A>(x: string, mapper: (x: DSVRowString<string>) => A) {
 	return tsvParse(x)
 		.filter((x) => x['column'] !== 'description')

@@ -11,18 +11,17 @@ import {
 	VenuesPrep,
 	PeoplePrep,
 	NewsPrep,
-	FeatureVenuesPrep
+	FeatureVenuesPrep,
+	sheetGet
 } from '../lib/data';
 
 export const load: PageLoad = async ({ fetch }) => {
-	const get = async (url: string) =>
-		fetch(url, { headers: { 'cache-control': 'public, max-age=3600' } }).then((res) => res.text());
 	const [prePapers, venues, news, featuredVenues, people] = await Promise.all([
-		get(PAPERS_TSV).then((x) => sheetToJson(x, PapersPrep)),
-		get(VENUES_TSV).then((x) => sheetToJson(x, VenuesPrep)),
-		get(NEWS_TSV).then((x) => sheetToJson(x, NewsPrep)),
-		get(FEATURE_VENUES_TSV).then((x) => sheetToJson(x, FeatureVenuesPrep)),
-		get(PEOPLE_TSV).then((x) => sheetToJson(x, PeoplePrep))
+		sheetGet(PAPERS_TSV, fetch).then((x) => sheetToJson(x, PapersPrep)),
+		sheetGet(VENUES_TSV, fetch).then((x) => sheetToJson(x, VenuesPrep)),
+		sheetGet(NEWS_TSV, fetch).then((x) => sheetToJson(x, NewsPrep)),
+		sheetGet(FEATURE_VENUES_TSV, fetch).then((x) => sheetToJson(x, FeatureVenuesPrep)),
+		sheetGet(PEOPLE_TSV, fetch).then((x) => sheetToJson(x, PeoplePrep))
 	]);
 	const papers = prePapers.map((paper) => {
 		const venue = venues.find((x) => x.nickname === paper.venue)!;

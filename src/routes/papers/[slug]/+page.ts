@@ -1,14 +1,19 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
-import { sheetToJson, PAPERS_TSV, VENUES_TSV, PapersPrep, VenuesPrep } from '../../../lib/data';
+import {
+	sheetToJson,
+	PAPERS_TSV,
+	VENUES_TSV,
+	PapersPrep,
+	VenuesPrep,
+	sheetGet
+} from '../../../lib/data';
 
 export const load: PageLoad = async ({ params, fetch }) => {
-	const get = async (url: string) =>
-		fetch(url, { headers: { 'cache-control': 'public, max-age=3600' } }).then((res) => res.text());
 	const [papers, venues] = await Promise.all([
-		get(PAPERS_TSV).then((x) => sheetToJson(x, PapersPrep)),
-		get(VENUES_TSV).then((x) => sheetToJson(x, VenuesPrep))
+		sheetGet(PAPERS_TSV, fetch).then((x) => sheetToJson(x, PapersPrep)),
+		sheetGet(VENUES_TSV, fetch).then((x) => sheetToJson(x, VenuesPrep))
 	]);
 	const foundPaper = papers.find((x) => x.webName === params.slug);
 	if (!foundPaper) {
