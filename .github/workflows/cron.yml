@@ -1,0 +1,23 @@
+on:
+  schedule:
+    # Example cron expressions:
+    # - '0 0 * * *'   # Run every day at midnight UTC
+    # - '15 3 * * *'  # Run every day at 3:15 AM UTC
+    # - '0 */6 * * *' # Run every 6 hours
+    - cron: '0 0 * * *' # Run every day at midnight UTC
+
+jobs:
+  cron_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Add your job steps here
+      - name: Run Your Cron Job
+        run: |
+          echo "Running cron job"
+            # run the deploy workflow
+            curl -X POST https://api.github.com/repos/${{ github.repository }}/actions/workflows/deploy.yml/dispatches \
+            -H "Accept: application/vnd.github.v3+json"
