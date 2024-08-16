@@ -58,7 +58,7 @@
 				<a class="block grow-0 shrink-0" href={person.url}>
 					<img
 						src={getUrl(person)}
-						class="h-[220px] rounded-full"
+						class="h-[220px] rounded-full object-cover"
 						on:error={(e) => {
 							// @ts-ignore
 							e.target.src = '/images/people/missing-person.png';
@@ -69,7 +69,7 @@
 			{:else}
 				<img
 					src={getUrl(person)}
-					class="h-[220px] rounded-full"
+					class="h-[220px] rounded-full object-cover"
 					on:error={(e) => {
 						// @ts-ignore
 						e.target.src = '/images/people/missing-person.png';
