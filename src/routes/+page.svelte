@@ -1,14 +1,11 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import type { Paper, News, Spotlight, Venue } from '$lib/app-types';
-	import Carousel from '$lib/carousel.svelte';
+	import type { News, Person } from '$lib/app-types';
 	import Markdown from '$lib/markdown.svelte';
-	import SmallPaper from '$lib/small-paper.svelte';
+	import PeopleList from '../lib/people-list.svelte';
 
 	export let data: {
-		groupedPapers: { papers: { paper: Paper; venue: Venue }[]; event: string }[];
 		news: News[];
-		spotlight: Spotlight[];
+		people: Person[];
 	};
 
 	function toDate(dateString: string) {
@@ -19,19 +16,35 @@
 			day: 'numeric'
 		});
 	}
+
+	$: groupsByPosition = data.people
+		.slice()
+		.sort((a: Person, b: Person) => {
+			const u = a.displayName.split(' ').at(-1) || a.displayName;
+			const v = b.displayName.split(' ').at(0) || b.displayName;
+			return u < v ? -1 : u > v ? 1 : 0;
+		})
+		.reduce(
+			(acc, person) => {
+				if (person.visible) {
+					if (!acc[person.position]) {
+						acc[person.position] = [];
+					}
+					acc[person.position].push(person);
+				}
+				return acc;
+			},
+			{} as Record<Person['position'], Person[]>
+		);
+
+	const labs = [
+		{ name: 'TDAVIS Lab', director: 'Wang Philips', url: 'https://www.sci.utah.edu/~beiwang/' },
+		{ name: 'HAVOC Lab', director: 'McNutt', url: 'http://mcnutt.in/' },
+		{ name: 'Isaacs Lab', director: 'Isaacs', url: 'https://kisaacs.github.io/' },
+		{ name: 'Rosen Lab', director: 'Rosen', url: 'https://cspaul.com/' },
+		{ name: 'Visualization Design Lab', director: 'Lex', url: 'https://vdl.sci.utah.edu/' }
+	];
 </script>
-
-<svelte:head>
-	<title>Utah Vis Collective</title>
-	<!-- preload project images -->
-	{#each data.spotlight as project}
-		<link rel="preload" as="image" href={project.image} media="(min-width: 768px)" />
-	{/each}
-</svelte:head>
-
-<div class="hidden md:block">
-	<Carousel projects={data.spotlight} />
-</div>
 
 <div class="mission md:text-xl md:-mt-1 mb-4">
 	We are a group of researchers and students at the University of Utah who are interested in the
@@ -43,28 +56,10 @@
 </div>
 
 <div class="mt-6 md:flex">
-	<div class="flex flex-col pr-10 basis-9/12 pt-3 border-t md:pt-0 md:border-t-0">
-		<div class="lead">
-			Recent Publications
-			<a
-				class="hidden md:inline-block ml-2 text-sm font-thin tracking-normal"
-				href={`${base}/papers`}>(VIEW ALL PAPERS)</a
-			>
-		</div>
-		{#each data.groupedPapers as group}
-			<div class="flex flex-col">
-				<div class="text-sm font-medium mb-3">{group.event}</div>
-				{#each group.papers as x}
-					<SmallPaper paper={x.paper} venue={x.venue} />
-				{/each}
-			</div>
-		{/each}
-	</div>
-
 	<div class="flex-col basis-3/12 pt-3 border-t md:pt-0 md:border-t-0">
 		<section>
 			<div class="lead">Updates</div>
-			{#each data.news as item}
+			{#each data.news.reverse() as item}
 				<div class="update text-sm mb-3">
 					<div class="italic">{toDate(item.date)}</div>
 					<Markdown content={item.text} />
@@ -73,3 +68,39 @@
 		</section>
 	</div>
 </div>
+
+<div class="lead">Sub Groups</div>
+<div class="text-sm mb-4">
+	UVC is composed of several labs, each with its own focus and research interests.
+</div>
+<div class="flex-wrap flex w-full justify-between">
+	{#each labs as lab}
+		<div class="flex flex-col justify-center items-center w-48 m-8">
+			<a class="font-bold" href={lab.url}>{lab.name}</a> ({lab.director})
+		</div>
+	{/each}
+</div>
+
+<!-- <div class="lead mt-8">PIs</div>
+<div class="flex-wrap flex w-full justify-center">
+	{#each [...(groupsByPosition['Faculty'] || [])] as person}
+		<PersonComponent {person} />
+	{/each}
+</div> -->
+<!-- 
+<div class="lead">Students</div>
+<div class="flex-wrap flex w-full justify-center">
+	{#each students as person}
+		<PersonComponent {person} />
+	{/each}
+</div> -->
+
+<!-- <div class="lead mt-6">alumni</div>
+<PeopleList people={groupsByPosition['Alumni'] || []} /> -->
+
+<div class="lead mt-6">Friends of the Collective</div>
+<PeopleList
+	people={(groupsByPosition['Friend'] || []).sort((a, b) =>
+		(a.lookupName.split(' ').at(-1) || '').localeCompare(b.lookupName.split(' ').at(-1) || '')
+	)}
+/>
